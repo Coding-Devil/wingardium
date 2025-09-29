@@ -1,0 +1,558 @@
+cmm-config-map:
+  cmm_env_l3ns: false
+  external_auth_support: false
+  ipds_env_multi: false
+  security_level: 3
+
+global:
+  alms:
+    host_interface: vlan3430
+    interface: eth2
+    ipv4:
+      cidr: 10.7.30.0/24
+      gw: 10.7.30.1
+      ip: 10.7.30.212
+    type: ipv4
+  alms_multi_container: true
+  almsvolumes:
+    redis_pvc: 1Gi
+  aws_ip_mgmt: false
+  bcmt: false
+  cbam: false
+  cluster_cidr: 14
+  cmm_uuid: 176a1c14-4798-4866-af65-a6d9a9f1687f
+  containers:
+    alarm:
+      imageName: harbor.nokia-solution.com/library/cmm/cmm-alarm:CMM24.7.0.9
+      resources:
+        cpu: 0.2
+        memory: 512Mi
+    alms:
+      imageName: harbor.nokia-solution.com/library/cmm/cmm-alms:CMM24.7.0.9  # CIQ: What is the Docker image for the ALMS container?|Docker image for the ALMS service.|harbor.nokia-solution.com/library/cmm/cmm-alms:CMM24.7.0.9
+      nodeSelector:
+        amf: "true"
+      pvc: true
+      resources:
+        cpu: 1.5
+        memory: 2Gi
+    amms:
+      imageName: harbor.nokia-solution.com/library/cmm/cmm-aimcpps:CMM24.7.0.9
+      initialDelaySeconds: 5
+      nodeSelector:
+        amf: "true"
+      periodSeconds: 20
+      resources:
+        cpu: 2
+        memory: 16Gi
+    bsp_init:
+      imageName: harbor.nokia-solution.com/library/cmm/cmm-init:CMM24.7.0.9
+      resources:
+        cpu: 0.8
+        memory: 256Mi
+    cmm-operator:
+      imageName: harbor.nokia-solution.com/library/cmm/cmm-operator:CMM24.7.0.9.DEFT1
+      nodeSelector:
+        amf: "true"
+      resources:
+        cpu: 2
+        memory: 2Gi
+    ctcs:
+      imageName: harbor.nokia-solution.com/library/cmm/cmm-aimctcs:CMM24.7.0.9
+      nodeSelector:
+        amf: "true"
+      pvc: true
+      resources:
+        cpu: 2
+        memory: 4Gi
+    dbs:
+      imageName: harbor.nokia-solution.com/library/cmm/cmm-aimdbs:CMM24.7.0.9
+      initialDelaySeconds: 15
+      nodeSelector:
+        amf: "true"
+      periodSeconds: 20
+      resources:
+        cpu: 2
+        memory: 8Gi
+    eems:
+      imageName: harbor.nokia-solution.com/library/cmm/cmm-aimeems:CMM24.7.0.9
+      nodeSelector:
+        amf: "true"
+      resources:
+        cpu: 1
+        memory: 2.5Gi
+    emms:
+      imageName: harbor.nokia-solution.com/library/cmm/cmm-aimcpps:CMM24.7.0.9
+      initialDelaySeconds: 5
+      nodeSelector:
+        amf: "true"
+      periodSeconds: 20
+      resources:
+        cpu: 2
+        memory: 16Gi
+    ipds:
+      antiaffinity:
+      - ipds
+      - necc
+      enabled: false
+      imageName: harbor.nokia-solution.com/library/cmm/cmm-aimipds:CMM24.7.0.9
+      initialDelaySeconds: 30
+      nodeSelector:
+        amf: "true"
+      periodSeconds: 20
+      resources:
+        cpu: 10
+        memory: 24Gi
+    ipps:
+      antiaffinity:
+      - ipps
+      imageName: harbor.nokia-solution.com/library/cmm/cmm-aimipps:CMM24.7.0.9
+      nodeSelector:
+        amf: "true"
+      periodSeconds: 20
+      resources:
+        cpu: 2
+        memory: 8Gi
+    lihs:
+      antiaffinity:
+      - lihs
+      imageName: harbor.nokia-solution.com/library/cmm/cmm-aimlihs:CMM24.7.0.9
+      nodeSelector:
+        amf: "true"
+      resources:
+        cpu: 2
+        memory: 1Gi
+    loglocal:
+      imageName: harbor.nokia-solution.com/library/cmm/cmm-loglocal:CMM24.7.0.9
+      resources:
+        cpu: 0.1
+        memory: 256Mi
+    lxprofile:
+      imageName: harbor.nokia-solution.com/library/cmm/cmm-lxprofile:CMM24.7.0.9
+      resources:
+        cpu: 0.1
+        memory: 512Mi
+    mmemon:
+      imageName: harbor.nokia-solution.com/library/cmm/cmm-mmemon:CMM24.7.0.9
+      resources:
+        cpu: 0.3
+        memory: 256Mi
+    necc:
+      antiaffinity:
+      - necc
+      - ipds
+      imageName: harbor.nokia-solution.com/library/cmm/cmm-necc:CMM24.7.0.9
+      initialDelaySeconds: 120
+      nodeSelector:
+        amf: "true"
+      periodSeconds: 20
+      pvc: true
+      resources:
+        cpu: 8
+        memory: 24Gi
+    paps:
+      antiaffinity:
+      - paps
+      imageName: harbor.nokia-solution.com/library/cmm/cmm-aimpaps:CMM24.7.0.9
+      initialDelaySeconds: 30
+      nodeSelector:
+        amf: "true"
+      periodSeconds: 20
+      resources:
+        cpu: 2
+        memory: 6Gi
+    pcms:
+      antiaffinity:
+      - pcms
+      imageName: harbor.nokia-solution.com/library/cmm/cmm-aimpcms:CMM24.7.0.9
+      initialDelaySeconds: 5
+      nodeSelector:
+        amf: "true"
+      periodSeconds: 20
+      resources:
+        cpu: 2
+        memory: 1Gi
+    platservices:
+      imageName: harbor.nokia-solution.com/library/cmm/cmm-platservices:CMM24.7.0.9
+      resources:
+        cpu: 0.12
+        memory: 512Mi
+    rcis:
+      antiaffinity:
+      - rcis
+      imageName: harbor.nokia-solution.com/library/cmm/cmm-aimrcis:CMM24.7.0.9
+      initialDelaySeconds: 5
+      nodeSelector:
+        amf: "true"
+      periodSeconds: 20
+      resources:
+        cpu: 2
+        memory: 8Gi
+    redis:
+      imageName: harbor.nokia-solution.com/library/cmm/cmm-redis:CMM24.7.0.9
+      resources:
+        cpu: 1
+        memory: 2.5Gi
+    ucds:
+      imageName: harbor.nokia-solution.com/library/cmm/cmm-aimucds:CMM24.7.0.9
+      initialDelaySeconds: 5
+      nodeSelector:
+        amf: "true"
+      periodSeconds: 20
+      resources:
+        cpu: 4
+        memory: 24Gi
+  ctcs_multi_container: true
+  ctcsvolumes:
+    redis_pvc: 10Gi
+  dbs_duplex: false
+  disable_apparmor: true
+  disable_network_policy: false
+  eems_multi_container: true
+  env_name: cmm2430-amf  # CIQ: Environment Name|Kubernetes namespace for CMM deployment.|cmm2430-amf
+  env_separator: '-'
+  external:
+    ipds:
+    - host_interface: vlan3431
+      interface: eth3
+      ipv4:
+        cidr: 10.7.31.0/24
+        gw: 10.7.31.1
+        ip:
+        - 10.7.31.35
+        - 10.7.31.36
+        - 10.7.31.37
+        - 10.7.31.38
+        - 10.7.31.39
+        - 10.7.31.40
+        - 10.7.31.41
+        - 10.7.31.42
+        - 10.7.31.160
+        - 10.7.31.161
+        - 10.7.31.162
+        - 10.7.31.163
+        - 10.7.31.164
+        - 10.7.31.165
+        - 10.7.31.166
+        - 10.7.31.167
+        - 10.7.31.168
+        - 10.7.31.169
+        - 10.7.31.170
+        - 10.7.31.171
+        - 10.7.31.172
+        - 10.7.31.173
+        - 10.7.31.174
+        - 10.7.31.175
+        - 10.7.31.176
+        - 10.7.31.177
+      name: 4gv4signal
+      type: ipv4
+    - host_interface: vlan3432
+      interface: eth4
+      ipv4:
+        cidr: 10.7.32.0/24
+        gw: 10.7.32.1
+        ip:
+        - 10.7.32.66
+        - 10.7.32.67
+        - 10.7.32.68
+        - 10.7.32.69
+        - 10.7.32.70
+        - 10.7.32.71
+        - 10.7.32.72
+        - 10.7.32.73
+        - 10.7.32.74
+        - 10.7.32.75
+        - 10.7.32.76
+        - 10.7.32.77
+        - 10.7.32.78
+        - 10.7.32.79
+        - 10.7.32.80
+        - 10.7.32.81
+        - 10.7.32.82
+        - 10.7.32.83
+        - 10.7.32.84
+        - 10.7.32.85
+        - 10.7.32.86
+        - 10.7.32.87
+        - 10.7.32.88
+        - 10.7.32.89
+      name: 5gv4signal
+      type: ipv4
+    ipps: []
+    lihs:
+    - host_interface: vlan3432
+      interface: eth4
+      ipv4:
+        cidr: 10.7.32.0/24
+        gw: 10.7.32.1
+        ip:
+        - 10.7.32.91
+        - 10.7.32.92
+      name: lihs
+      type: ipv4
+    paps: []
+    pcms:
+    - host_interface: vlan3430
+      interface: eth2
+      ipv4:
+        cidr: 10.7.30.0/24
+        gw: 10.7.30.1
+        ip:
+        - 10.7.30.209
+        - 10.7.30.210
+      name: PCMS_NET
+      type: ipv4
+
+  external_cni: ipvlan
+  issu_auto: true
+  istio:
+    createGateway: true
+    gateways:
+    - ingress
+    privateKey: /etc/istio/ingressgateway-certs/tls.key
+    serverCertificate: /etc/istio/ingressgateway-certs/tls.crt
+  k8s_apiserver_endpoints:
+  - 10.7.10.1
+  - 10.7.10.2
+  - 10.7.10.3
+  k8s_apiserver_port: 6443
+  kubeDNS:
+    ip: 172.30.0.10
+  lihs_multi_container: true
+  multi_container: true
+  ne_type: qa
+  necc_stdout_logging: false
+  necc_stdout_logs:
+  - /data-logs/master.log
+  - /data-logs/fslog.log
+  - /data-logs/signaling.log
+  necccount: 3
+  neccvolumes:
+    charging_pvc: 50Gi
+    influx_pvc: 1Gi
+    kafka_pvc: 15Gi
+    logs_pvc: 15Gi
+    mariadb_pvc: 2Gi
+    pcmd_pvc: 150Gi
+    perf_pvc: 50Gi
+    pm_pvc: 15Gi
+    redis_pvc: 5Gi
+    sgsnmon_pvc: 20Gi
+    shared_pvc: 10Gi
+    store_pvc: 50Gi
+    ucds_pvc: 10Gi
+  non_cluster_admin_user: false
+  ntp_servers:
+  - 169.254.169.123
+  oam:
+    host_interface: vlan3430
+    interface: eth2
+    ipv4:
+      cidr: 10.7.30.0/24
+      floating_ip: 10.7.30.208
+      gw: 10.7.30.1
+      ip:
+      - 10.7.30.204
+      - 10.7.30.205
+      - 10.7.30.206
+      - 10.7.30.207
+    type: ipv4
+  olm: false
+  openshift: true
+  ossu_opts:
+    maintenance_timer: 10
+    sgsn_offloading: false
+    sgsn_offloading_timeout: 120
+  pod_disruption_budget: true
+  pod_disruption_value:
+    alms:
+      maxUnavailable: 1
+      minAvailable: 1
+    amms:
+      maxUnavailable: 1
+      minAvailable: 1
+    ctcs:
+      minAvailable: 1
+    dbs:
+      minAvailable: 1
+    eems:
+      minAvailable: 1
+    emms:
+      minAvailable: 1
+    ipds:
+      minAvailable: 1
+    ipps:
+      minAvailable: 1
+    lihs:
+      minAvailable: 1
+    necc:
+      minAvailable: 2
+    paps:
+      minAvailable: 1
+    pcms:
+      minAvailable: 1
+    rcis:
+      minAvailable: 1
+    ucds:
+      minAvailable: 1
+  pre_check: false
+  prometheus:
+    namespaceLabel:
+      permission: talk-to-all
+    podLabel:
+      app: prometheus
+  provisioning:
+    dnn1: wap1.nokia.com  # CIQ: Primary DNN|Primary Data Network Name for user sessions.|internet.mnc001.mcc310.gprs
+    dnn2: wap2.nokia.com  # CIQ: Secondary DNN|Secondary Data Network Name.|ims.mnc001.mcc310.gprs
+    dnn3: vzw  # CIQ: Tertiary DNN|Tertiary Data Network Name.|vzw
+    dns_ipds_ip1: 10.7.32.94
+    dns_ipds_ip2: 10.7.32.95
+    end_supi: "310012010005000"  # CIQ: Last SUPI|Last 15-digit Subscriber Permanent Identifier in your range.|310012010005000
+    ipv4:
+      alms_ip: 10.7.30.213
+      amf_svc_com_ip: 10.7.32.79
+      amf_svc_default_ip: 10.7.32.77
+      amf_svc_ee_ip: 10.7.32.80
+      amf_svc_loc_ip: 10.7.32.78
+      amf_svc_mt_ip: 10.7.32.81
+      n2_ip: 10.7.32.66
+      n8_ip: 10.7.32.67
+      n11_ip: 10.7.32.68
+      n12_ip: 10.7.32.69
+      n14_ip: 10.7.32.70
+      n15_ip: 10.7.32.71
+      n17_ip: 10.7.32.72
+      n22_ip: 10.7.32.73
+      n26_ip: 10.7.32.74
+      network_trace_ip: 10.7.32.91
+      nfy_amf_ip: 10.7.32.83
+      nfy_ausf_ip: 10.7.32.84
+      nfy_eir_ip: 10.7.32.82
+      nfy_nrf_ip: 10.7.32.85
+      nfy_nssf_ip: 10.7.32.86
+      nfy_pcf_ip: 10.7.32.87
+      nfy_smf_ip: 10.7.32.88
+      nfy_udm_ip: 10.7.32.89
+      nnrf_ip: 10.7.32.75
+      nsms_ip: 10.7.32.76
+    ipv6: null
+    mcc: 310
+    mnc: "012"
+    network_name: Verizon  # CIQ: Full Network Name|The full name of your network.|Verizon
+    network_short_name: VzW  # CIQ: Short Network Name|The short name of your network.|VzW
+    nrf_endpoint_fqdn: nrd-nrd-684888c0ebb17f37-istio-system.apps.bigdurian.nokia-solution.com  # CIQ: NRF FQDN|Fully Qualified Domain Name of the NRF service.|nrd-nrf-...-istio-system.apps...
+    nssf_endpoint_fqdn: nrd-nssf-684888c0ebb17f37-istio-system.apps.bigdurian.nokia-solution.com  # CIQ: NSSF FQDN|Fully Qualified Domain Name of the NSSF service.|nrd-nssf-...-istio-system.apps...
+    primary_dns_ip: 8.8.8.8  # CIQ: Primary DNS IP|IP address of the primary DNS server.|8.8.8.8
+    sd1: D143A5
+    sd2: ABCDEF
+    sd3: "000007"
+    secondary_dns_ip: 172.30.0.10  # CIQ: Secondary DNS IP|IP address of the secondary DNS server.|172.30.0.10
+    shared_end_supi: "901790010005000"  # CIQ: Last Shared SUPI|Last shared Subscriber Permanent Identifier.|901790010005000
+    shared_mcc: 901  # CIQ: Shared MCC|Mobile Country Code for shared resources.|901
+    shared_mnc: "79"  # CIQ: Shared MNC|Mobile Network Code for shared resources.|79
+    shared_start_supi: "901790010000001"  # CIQ: First Shared SUPI|First shared Subscriber Permanent Identifier.|901790010000001
+    smf_endpoint_ip: 10.7.52.78
+    sst1: 1
+    sst2: 10
+    sst3: 1
+    start_supi: "310012010000001"
+    tac:
+    - 3111
+    - 3112
+    - 3113
+    - 3114
+    - 5800
+    udm_endpoint_ip: 10.7.32.30
+    udm_endpoint_ip_2: 10.7.32.31
+    udm_endpoint_ip_3: 10.7.32.32
+  pvc_hostpath_prefix: /tmp
+  rbac_resourcename: cmm-scc
+  sbi_net_container_lb: istio
+  sbi_net_container_native: false
+  scale:
+    alms:
+      cpu_utilization: 80
+      maxReplicas: 1
+      memory_utilization: 91
+      minReplicas: 1
+    amms:
+      cpu_utilization: 80
+      maxReplicas: 8
+      memory_utilization: 91
+      minReplicas: 4
+      ue_utilization: 350000
+    ctcs:
+      cpu_utilization: 80
+      maxReplicas: 1
+      memory_utilization: 91
+      minReplicas: 1
+    dbs:
+      cpu_utilization: 80
+      maxReplicas: 3
+      memory_utilization: 91
+      minReplicas: 3
+    eems:
+      cpu_utilization: 80
+      maxReplicas: 2
+      memory_utilization: 91
+      minReplicas: 2
+    emms:
+      cpu_utilization: 80
+      maxReplicas: 2
+      memory_utilization: 91
+      minReplicas: 2
+      ue_utilization: 350000
+    ipds:
+      cpu_utilization: 80
+      maxReplicas: 2
+      minReplicas: 2
+    ipps:
+      cpu_utilization: 81
+      maxReplicas: 0
+      minReplicas: 0
+    lihs:
+      cpu_utilization: 80
+      maxReplicas: 2
+      memory_utilization: 91
+      minReplicas: 2
+    paps:
+      cpu_utilization: 82
+      maxReplicas: 0
+      minReplicas: 0
+    pcms:
+      maxReplicas: 2
+      minReplicas: 2
+    rcis:
+      maxReplicas: 2
+      minReplicas: 2
+  seLinuxOptions:
+    level: null
+    role: null
+    type: null
+    user: null
+  secrets:
+    operator_pre_check:
+      necc_passwd: ""
+      worker_node_passwd: ""
+      worker_node_sudo_passwd: ""
+      worker_node_user: ""
+    users:
+      ca4mn_passwd: TurnKey_5776
+      cbamuser_passwd: TurnKey_5776
+      cgw_passwd: TurnKey_5776
+      cmm_passwd: TurnKey_5776
+      cmmsecurity_passwd: TurnKey_5776
+      dcae_dfc_passwd: TurnKey_5776
+      diagnostic_passwd: TurnKey_5776
+      root_passwd: {}
+      rsp_passwd: TurnKey_5776
+      sam5620_passwd: TurnKey_5776
+      trainee_passwd: TurnKey_5776
+  skipNeccPvcCleanupJob: true
+  stdout_logging: true
+  storageclass: ocs-storagecluster-cephfs
+  timezone: America/Chicago
+  traefik:
+    entryPoints:
+    - websecure
+  ucdscount: 1
