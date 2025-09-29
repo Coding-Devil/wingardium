@@ -1,0 +1,44 @@
+[tool.isort]
+balanced_wrapping = true
+line_length = 99
+multi_line_output = 4
+skip_glob = [
+    ".*tox",
+    ".venv",
+    ".scratchpad",
+]
+known_first_party = [
+    "tests",
+    "ai"
+]
+
+[tool.pytest.ini_options]
+filterwarnings = [
+    "ignore::DeprecationWarning",
+]
+junit_family = "legacy"
+
+[tool.coverage.run]
+branch = true
+source = [
+    "ai",
+]
+
+[tool.coverage.report]
+omit = [
+    ".tox/*",
+    "tests/*",
+    "setup.py",
+]
+ignore_errors = true
+show_missing = true
+skip_covered = true
+skip_empty = true
+
+[build-system]
+requires = [
+    "setuptools>=61.0",
+    "PyYAML",
+    "wheel"
+]
+build-backend = "setuptools.build_meta"

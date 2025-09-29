@@ -1,0 +1,22 @@
+services:
+  starship_ai:
+    image: se/starship_ai:1.0.0.dev0
+    container_name: infra-iso-builder
+    privileged: true  # Required for mounting loop devices etc.
+    stdin_open: true
+    tty: true
+    command: /bin/bash
+    volumes:
+      - /home/cmiller/RHEL_ISO/input:/infra-iso-builder/input
+      - /home/cmiller/RHEL_ISO/output:/infra-iso-builder/output
+    working_dir: /infra-iso-builder/
+    environment:
+      - container=oci
+    cap_add:
+      - SYS_ADMIN
+      - MKNOD
+    devices:
+      - /dev/fuse
+    security_opt:
+      - seccomp=unconfined
+

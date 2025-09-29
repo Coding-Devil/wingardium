@@ -1,0 +1,61 @@
+default:
+  # The fields title, description, contact_name, contact_email. contact_url, license_name,
+  # license_url, and public_url are used when generating the OAS3 spec.  title: Nokia Network as Code
+  title: Starship Enterprise Status Manager
+  description: Simplified REST API to allow tracking orders
+  contact_name: Starship Enterprise
+  contact_email: colin.hutchings@nokia.com
+  contact_url: https://some.support.url.nokia.com/sm
+  license_name: Nokia Proprietary - All Rights Reserved
+  license_url: https://some.license.url.nokia.com/sm
+  public_url: http://127.0.0.1:5050
+  # host, port, and log_level define what the container should listen on and to what detail
+  # it should log.  When running the container, you'll need to map the external port to
+  # the value you set port to here.  For running inside of a container, host should remain
+  # 0.0.0.0 - for running locally (e.g., by installing the package and running via the CLI),
+  # you can change host to 127.0.0.1 or any other IP address your system will allow you to listen
+  # on.
+  host: 0.0.0.0
+  port: 5050
+  log_level: INFO
+  # project_id and app_credentials are specific to the environment you will be deploying to.
+  # project_id is the GCP project that will host both the CloudRun containers as well as the
+  # nosql DBs.  app_credentials contains the json structure that provides the service account
+  # details for the server to talk to the nosql DB.
+  #project_id: cns-nac-poc3-2adf
+  #app_credentials: ./docker/cns-nac-poc3-2adf-8f152760c256.json
+  # intent_list_api_url is the url of the CMM that has the list of Day 2 intents
+  # intent_list_version is the version of the CMM that we are using
+  # intent_list_timeout ensures a timeout if it takes too long to reach the CMM
+  intent_list_api_url: "https://ccma.int.net.nokia.com/api/v1/intents"
+  intent_list_version: "v1"
+  intent_list_timeout: 5
+# Each endpoint describes how to talk to a specific endpoint of a specific type.
+#     The name is simply a user-friendly string.
+#     The url used to build the specific path to this endpoint.
+#     The type simply defines what type of thing we're talking to.  Valid values are NBBE, NEF,
+#         and NPC
+#     The connect_ and read_ timeouts are used when calling the relevant URL - connect controls
+#         how long we should wait for the API call to connect and read controls how long we
+#         should wait for the URL to respond to our request.
+#     The headers contain the list of headers that are required for this endpoint.  As a rule,
+#         we expect to have both Accept and Content-Type provided.  Only application/json is
+#         currently supported for both.  Any other headers provided will be sent as-is.
+# llm:
+#   workspace: "VR0711AttackVectorDiscovery"
+#   api_key: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6IkNsaXBweSIsIk9iamVjdElEIjoiMTQyMjBEQUMtQzRDRS00M0ZFLUEzNDMtOTU5ODQ5QjNGODlDIiwid29ya1NwYWNlTmFtZSI6IlZSMDcxMUF0dGFja1ZlY3RvckRpc2NvdmVyeSIsIm5iZiI6MTc0MDQ5MTIyNSwiZXhwIjoxNzcyMDI3MjI1LCJpYXQiOjE3NDA0OTEyMjV9.q2lG-fjUrMkDyry-E7PYDYZs7fuSfwByaggdRcRZ6wQ"
+#   url: "https://nvdc-prod-euw-llmapiorchestration-app.azurewebsites.net/v1.1/DocumentAssistant/QueryDocumentsSummary"
+#   teams_hook_url: "https://nokia.webhook.office.com/webhookb2/d9755557-ec72-40c3-8b48-017b8638f157@5d471751-9675-428d-917b-70f44f9630b0/IncomingWebhook/a27f904c9f1946ae8231e2f9e9129cb7/d9176e4c-c243-4576-a8ad-ab36d9faaa5e/V2heJJT42PST3Lv2RjrJfzPs4kMrOyYJHMbl0IIUZkrZc1"
+#   service_engineer_ui_url: "http://localhost:3001"
+#   temperature: 0.2
+#   max_gen_len: 150
+#   top_p: 0.4
+#   region_name: "us-east-2"
+#   system_prompt: "Keep your response brief. If you asked what is Nokia Self-service, say don’t know. Nokia's customer ordered 5G SA Mobile Core that is consisted of NCP cluster, running OpenShift 4.16 with following CNFs to be deployed: AMF, SMF, UPF, NRF, UDM, SDK and NPC. Question is related to Nokia and telecom.It is possible, that the packet core will be deployed on the Nokia Cloud platform in one site located in Ottawa, Canada."
+endpoints: []
+database:
+  hostname: '127.0.0.1'
+  port: "5432"
+  username: 'starship_user'
+  password: 'Starship'
+  name: 'starship'

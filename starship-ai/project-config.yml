@@ -1,0 +1,17 @@
+component: starship_ai
+version:
+  released: 1.0.0
+
+container:
+  images:
+  - name: starship_ai
+    namespace: se # starship enterprise
+    dockerDir: docker
+    buildArgs: >
+      --build-arg "http_proxy=${http_proxy}" --build-arg "https_proxy=${https_proxy}" --no-cache
+    anchor_threshold: high
+helm:
+  charts:
+  - name: starship_ai
+    namespace: se
+    chartDir: deploy/helm
