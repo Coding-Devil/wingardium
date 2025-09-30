@@ -1,4 +1,6 @@
 #  Copyright (c) 2025 Nokia - Nokia Proprietary Internal Use Only - All Rights Reserved.
+import json
+
 from fastapi import APIRouter, HTTPException, status
 
 from ai.agents.bedrock_client import bedrock_invoke
@@ -10,16 +12,32 @@ from ai.routes.v1.common import COMMON_ERRORS, TimedRoute
 router = APIRouter(route_class=TimedRoute)
 
 # common tags
-tags = ["infra"]
+tags = ["Infra Hub Cluster Assistant"]
 
 tag_metadata = {
     "name": "Infra Hub Cluster Assistant",
     "description": "APIs for Infra Hub Cluster payload schema and chat.",
 }
 
+INFRA_HUB_VALUES_STATE = {
+    "clusterName": "",
+    "domain": "",
+    "vlanId": "",
+    "storageVlanId": "",
+    "machineNetwork": "",
+    "machineNetworkGW": "",
+    "clusterNetwork": "",
+    "serviceNetwork": "",
+    "apiVIP": "",
+    "ingressVIP": "",
+    "masterPassword": "",
+    "sshPublicKey": "",
+    "cidrNCP": "",
+}
+
 
 @router.post(
-    "/infra-payload",
+    "/hub-cluster/payload",
     tags=tags,
     operation_id="PostInfraPayload",
     summary="Generate Infra Hub Cluster payload schema",
@@ -34,14 +52,14 @@ tag_metadata = {
 )
 async def infra_payload(req: InfraHubClPayloadRequest) -> InfraHubClPayloadResponse:
     try:
-        properties_obj = default_infra_hubcl_properties()
+        properties_obj = default_infra_hubcl_properties(INFRA_HUB_VALUES_STATE)
         return InfraHubClPayloadResponse(properties=properties_obj)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 
 @router.post(
-    "/infra-chat",
+    "/hub-cluster/chat",
     tags=tags,
     operation_id="PostInfraChat",
     summary="Infra Hub Cluster chat endpoint",
@@ -57,14 +75,28 @@ async def infra_payload(req: InfraHubClPayloadRequest) -> InfraHubClPayloadRespo
 async def infra_chat(req: InfraHubClChatRequest) -> str:
     try:
         system_prompt = (
-            "You are the Infra Hub Cluster Assistant. Provide concise, helpful answers "
-            "about infrastructure and cluster configuration."
+            f"""
+    You are a useful Assistant.
+    The user input might include the value for one or more of the following properties:
+    {INFRA_HUB_VALUES_STATE}
+
+    Your job is to return the same structure.
+    The value of all parameters should be kept the same except the one that the user has changed.
+    Return only with the JSON object with no extra text.
+            """
         )
+
         response_text = bedrock_invoke(
             system_prompt=system_prompt,
             user_msg=req.input,
             max_tokens=512,
         )
+
+        data_json = json.loads(response_text)
+        print(f"Data JSON: {data_json}")
+        for key in data_json:
+            INFRA_HUB_VALUES_STATE[key] = data_json[key]
+
         return response_text
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

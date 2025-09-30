@@ -1,4 +1,6 @@
 #  Copyright (c) 2025 Nokia - Nokia Proprietary Internal Use Only - All Rights Reserved.
+import json
+
 from fastapi import APIRouter, HTTPException, status
 
 from ai.agents.bedrock_client import bedrock_invoke
@@ -10,16 +12,28 @@ from ai.routes.v1.common import COMMON_ERRORS, TimedRoute
 router = APIRouter(route_class=TimedRoute)
 
 # common tags
-tags = ["general-info"]
+tags = ["General Info Assistant"]
 
 tag_metadata = {
     "name": "General Info Assistant",
     "description": "APIs for generating general information payload schemas.",
 }
 
+GEN_INFO_VALUES_STATE = {
+    "site": "",
+    "timeZone": "",
+    "ipNTP": "",
+    "ipDNS1": "",
+    "ipDNS2": "",
+    "mcc": "",
+    "mnc": "",
+    "plmn": "",
+    "apn": "",
+}
+
 
 @router.post(
-    "/geninfo_payload",
+    "/general-info/payload",
     tags=tags,
     operation_id="PostGeneralInfoPayload",
     summary="Generate General Info payload schema",
@@ -34,7 +48,7 @@ tag_metadata = {
 )
 async def geninfo_payload(req: GenInfoPayloadRequest) -> GenInfoPayloadResponse:
     try:
-        properties_obj = default_gen_info_properties()
+        properties_obj = default_gen_info_properties(GEN_INFO_VALUES_STATE)
         return GenInfoPayloadResponse(properties=properties_obj)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -42,7 +56,7 @@ async def geninfo_payload(req: GenInfoPayloadRequest) -> GenInfoPayloadResponse:
 
 # Optional alias with hyphen for compatibility with requested path style
 @router.post(
-    "/geninfo-chat",
+    "/general-info/chat",
     tags=tags,
     operation_id="PostGeneralInfoChat",
     summary="Generate General Info chat endpoint",
@@ -58,14 +72,27 @@ async def geninfo_payload(req: GenInfoPayloadRequest) -> GenInfoPayloadResponse:
 async def geninfo_payload_hyphen(req: GenInfoChatRequest) -> str:
     try:
         system_prompt = (
-            "You are the General Info Assistant. Provide concise, helpful answers "
-            "about general Nokia telecom."
+            f"""
+    You are a useful Assistant.
+    The user input might include the value for one or more of the following properties:
+    {GEN_INFO_VALUES_STATE}
+
+    Your job is to return the same structure.
+    The value of all parameters should be kept the same except the one that the user has changed.
+    Return only with the JSON object with no extra text.
+            """
         )
         response_text = bedrock_invoke(
             system_prompt=system_prompt,
             user_msg=req.question,
             max_tokens=512,
         )
+
+        data_json = json.loads(response_text)
+        print(f"Data JSON: {data_json}")
+        for key in data_json:
+            GEN_INFO_VALUES_STATE[key] = data_json[key]
+
         return response_text
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

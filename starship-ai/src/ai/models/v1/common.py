@@ -22,9 +22,13 @@ class FieldSchema(BaseModel):
     # Use aliases to serialize as x-displayName/x-order in OpenAPI while allowing Pythonic names
     x_displayName: str = Field(alias="x-displayName", description="Human-friendly label")
     x_order: int = Field(default=1, alias="x-order", description="Ordering hint for UI")
-
+    x_value: str = Field(alias="x-value", description="Value of the field")
     # Pydantic v2 config
     model_config = ConfigDict(populate_by_name=True)
+
+
+def make(display: str, value: str) -> FieldSchema:
+    return FieldSchema(x_displayName=display, x_order=1, x_value=value)
 
 
 # Exceptions

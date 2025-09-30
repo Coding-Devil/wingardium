@@ -5,7 +5,8 @@ import re
 
 import streamlit as st
 import yaml
-from config import BLUEPRINT_PATH
+
+from .config import BLUEPRINT_PATH, PARAM_DESCRIPTIONS
 
 
 def parse_ciq_params_from_yaml(yaml_path):
@@ -93,5 +94,10 @@ def merge_yaml_with_llm(blueprint_str: str, user_values_str: str, bedrock_invoke
 
 
 # Initialize CIQ schema
-CIQ_SCHEMA = parse_ciq_params_from_yaml(BLUEPRINT_PATH)
-USER_PARAMS = sorted(CIQ_SCHEMA.keys())
+try:
+    CIQ_SCHEMA = parse_ciq_params_from_yaml(BLUEPRINT_PATH)
+    USER_PARAMS = sorted(CIQ_SCHEMA.keys())
+except Exception:
+    # Fallback to config-based parameters if YAML parsing fails
+    CIQ_SCHEMA = PARAM_DESCRIPTIONS
+    USER_PARAMS = sorted(PARAM_DESCRIPTIONS.keys())

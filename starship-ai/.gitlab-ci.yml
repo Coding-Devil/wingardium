@@ -1,0 +1,12 @@
+include:
+  - project: 'BuildTools/gitlab-ci'
+    ref: '5.2-stable'
+    file:
+      - '/core/tubs.yml'
+
+.container_scan:
+  variables:
+    ANCHOR_FAIL_ON_SECRETS: "false"
+    ANCHOR_FAIL_THRESHOLD: "high"
+    ANCHOR_EXTRA_ALLOW_LIST: "build/anchor/allow_list.txt"
+

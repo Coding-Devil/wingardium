@@ -9,7 +9,7 @@ from ai.routes.v1.common import COMMON_ERRORS, TimedRoute
 router = APIRouter(route_class=TimedRoute)
 
 # common tags
-tags = ['cudo']
+tags = ['CUDO Assistant']
 tag_metadata = {
     'name': 'CUDO Assistant',
     'description': 'AI CUDO Assistant APIs.'
@@ -17,7 +17,7 @@ tag_metadata = {
 
 
 @router.post(
-    "/cudo_chat",
+    "/cudo/chat",
     tags=tags,
     operation_id="CuDoChat",
     summary="CuDochat endpoint",

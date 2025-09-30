@@ -11,6 +11,7 @@ class CIQPayloadRequest(BaseModel):
 
 class CIQPayloadResponse(BaseModel):
     properties: dict[str, FieldSchema]
+    response: str = "CIQ schema returned"
 
 
 def get_default_ciq_parameters() -> dict[str, FieldSchema]:
@@ -58,4 +59,5 @@ def build_mock_ciq_response() -> CIQPayloadResponse:
     """Create a mock CIQPayloadResponse object for quick testing."""
     return CIQPayloadResponse(
         properties=get_default_ciq_parameters(),
+        response="Mock CIQ payload schema returned"
     )

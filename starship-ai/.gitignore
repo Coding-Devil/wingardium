@@ -1,0 +1,46 @@
+# Ignore build output files
+#
+*.pyc
+*.egg-info
+dist/
+build/lib/
+build/scripts-*/
+build/bdist.*/
+build/helm/*
+pip-wheel-metadata/
+docker/*.whl
+docker/infra-iso-builder/
+src/infra-iso-builder/input/*
+src/infra-iso-builder/output/*
+src/infra-iso-builder/rhel-9.6-x86_64-dvd.iso-extract/
+docker/requirements.txt
+docker/sm.yaml
+docs/*/build/*/
+*-docs.tz2
+temp/
+
+# Ignore virtualenv directories
+.env/
+.venv/
+.tox/
+.ctox/
+venv/
+
+# Ignore jetbrains stuff
+.idea/
+*.iml
+
+# Ignore tox build stuff
+.coverage*
+.pytest_cache/
+junit-report.xml
+coverage.xml
+
+# Ignore TUBS stuff
+.scratchpad/
+
+# Ignore Mac stuff
+**/.DS_Store
+
+#Ignore VSCode stuff
+.vscode
